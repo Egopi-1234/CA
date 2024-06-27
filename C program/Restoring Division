@@ -1,0 +1,36 @@
+#include <stdio.h>
+void restoring_division(int dividend, int divisor, int *quotient, int *remainder) {
+    int n = sizeof(int) * 8; 
+    int A = 0;
+    int Q = dividend;
+    int M = divisor;
+    for (int i = 0; i < n; i++) {
+        A = (A << 1) | (Q >> (n - 1) & 1); 
+        Q = (Q << 1);                      
+        A = A - M;                         
+        if (A < 0) {
+            Q = Q & ~1;   
+            A = A + M;    
+        } else {
+            Q = Q | 1;    
+        }
+    }
+    *quotient = Q;
+    *remainder = A;
+}
+int main() {
+    int dividend, divisor;
+    int quotient, remainder;
+    printf("Enter the dividend: ");
+    scanf("%d", &dividend);
+    printf("Enter the divisor: ");
+    scanf("%d", &divisor);
+    if (divisor == 0) {
+        printf("Error: Division by zero is not allowed.\n");
+        return 1;
+    }
+    restoring_division(dividend, divisor, &quotient, &remainder);
+    printf("Quotient: %d\n", quotient);
+    printf("Remainder: %d\n", remainder);
+    return 0;
+}
